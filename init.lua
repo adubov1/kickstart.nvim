@@ -1,89 +1,3 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
-
-What is Kickstart?
-
-  Kickstart.nvim is *not* a distribution.
-
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
-
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
-Kickstart Guide:
-
-  TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
-
-    If you don't know what this means, type the following:
-      - <escape key>
-      - :
-      - Tutor
-      - <enter key>
-
-    (If you already know the Neovim basics, you can skip this step.)
-
-  Once you've completed that, you can continue working through **AND READING** the rest
-  of the kickstart init.lua.
-
-  Next, run AND READ `:help`.
-    This will open up a help window with some basic information
-    about reading, navigating and searching the builtin help documentation.
-
-    This should be the first place you go to look when you're stuck or confused
-    with something. It's one of my favorite Neovim features.
-
-    MOST IMPORTANTLY, we provide a keymap "<space>sh" to [s]earch the [h]elp documentation,
-    which is very useful when you're not exactly sure of what you're looking for.
-
-  I have left several `:help X` comments throughout the init.lua
-    These are hints about where to find more information about the relevant settings,
-    plugins or Neovim features used in Kickstart.
-
-   NOTE: Look for lines like this
-
-    Throughout the file. These are for you, the reader, to help you understand what is happening.
-    Feel free to delete them once you know what you're doing, but they should serve as a guide
-    for when you are first encountering a few different constructs in your Neovim config.
-
-If you experience any errors while trying to install kickstart, run `:checkhealth` for more info.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now! :)
---]]
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -91,7 +5,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -204,6 +118,45 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+
+vim.keymap.set('i', 'jk', '<ESC>')
+vim.keymap.set('n', '<leader>l', '<Cmd>Lazy<CR>')
+
+vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>')
+
+vim.keymap.set('n', '<leader>w', '<Cmd>write<CR>')
+vim.keymap.set('n', '<leader>q', '<Cmd>quit<CR>')
+vim.keymap.set('n', '<M-q>', '<Cmd>qall<CR>')
+
+-- Neovide Config
+if vim.g.neovide then
+  vim.keymap.set('n', '<D-s>', ':w<CR>') -- Save
+  vim.keymap.set('v', '<D-c>', '"+y') -- Copy
+  vim.keymap.set('n', '<D-v>', '"+P') -- Paste normal mode
+  vim.keymap.set('v', '<D-v>', '"+P') -- Paste visual mode
+  vim.keymap.set('c', '<D-v>', '<C-R>+') -- Paste command mode
+  vim.keymap.set('i', '<D-v>', '<ESC>l"+Pli') -- Paste insert mode
+
+  vim.g.neovide_scale_factor = 1.0
+  local change_scale_factor = function(delta)
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+  end
+  vim.keymap.set('n', '<C-=>', function()
+    change_scale_factor(1.25)
+  end)
+  vim.keymap.set('n', '<C-->', function()
+    change_scale_factor(1 / 1.25)
+  end)
+
+  vim.g.neovide_cursor_trail_size = 0
+  vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
+end
+
+-- Allow clipboard copy paste in neovim
+vim.api.nvim_set_keymap('', '<D-v>', '+p<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('!', '<D-v>', '<C-R>+', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('t', '<D-v>', '<C-R>+', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', '<D-v>', '<C-R>+', { noremap = true, silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -407,12 +360,11 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          mappings = {
+            i = { ['<c-d>'] = 'delete_buffer' },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -431,6 +383,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+      vim.keymap.set('v', '<leader>sw', builtin.grep_string, { desc = '[S]earch current selection' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
@@ -543,6 +496,9 @@ require('lazy').setup({
           -- or a suggestion from your LSP for this to activate.
           map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
 
+          -- buf hover info
+          map('K', vim.lsp.buf.hover, 'Show LSP info for current symbol')
+
           -- Find references for the word under your cursor.
           map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
@@ -553,11 +509,7 @@ require('lazy').setup({
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
-          map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-
-          -- WARN: This is not Goto Definition, this is Goto Declaration.
-          --  For example, in C this would take you to the header.
-          map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
 
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
@@ -661,6 +613,38 @@ require('lazy').setup({
       --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
+      local function add_ruby_deps_command(client, bufnr)
+        vim.api.nvim_buf_create_user_command(bufnr, 'ShowRubyDeps', function(opts)
+          local params = vim.lsp.util.make_text_document_params()
+          local showAll = opts.args == 'all'
+
+          client.request('rubyLsp/workspace/dependencies', params, function(error, result)
+            if error then
+              print('Error showing deps: ' .. error)
+              return
+            end
+
+            local qf_list = {}
+            for _, item in ipairs(result) do
+              if showAll or item.dependency then
+                table.insert(qf_list, {
+                  text = string.format('%s (%s) - %s', item.name, item.version, item.dependency),
+                  filename = item.path,
+                })
+              end
+            end
+
+            vim.fn.setqflist(qf_list)
+            vim.cmd 'copen'
+          end, bufnr)
+        end, {
+          nargs = '?',
+          complete = function()
+            return { 'all' }
+          end,
+        })
+      end
+
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -695,6 +679,24 @@ require('lazy').setup({
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               -- diagnostics = { disable = { 'missing-fields' } },
+            },
+          },
+        },
+        ruby_lsp = {
+          on_attach = function(client, buffer)
+            add_ruby_deps_command(client, buffer)
+          end,
+          init_options = {
+            formatter = 'auto',
+            addonSettings = {
+              ['Ruby LSP Rails'] = {
+                enablePendingMigrationsPrompt = false,
+              },
+            },
+            indexing = {
+              excludedPatterns = {
+                '**/storage/**',
+              },
             },
           },
         },
@@ -799,12 +801,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
       },
@@ -835,7 +837,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'enter',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -850,7 +852,7 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        documentation = { auto_show = true, auto_show_delay_ms = 500 },
       },
 
       sources = {
@@ -869,7 +871,7 @@ require('lazy').setup({
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
       -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = 'lua' },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
@@ -885,11 +887,7 @@ require('lazy').setup({
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-      }
+      require('tokyonight').setup {}
 
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
@@ -903,6 +901,7 @@ require('lazy').setup({
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
+    version = '*',
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -910,7 +909,17 @@ require('lazy').setup({
       --  - va)  - [V]isually select [A]round [)]paren
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
+      local ts_spec = require('mini.ai').gen_spec.treesitter
+      require('mini.ai').setup {
+        n_lines = 500,
+        custom_textobjects = {
+          s = ts_spec {
+            a = '@string.outer',
+            i = '@string.inner',
+          },
+        },
+        search_method = 'cover_or_next',
+      }
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
@@ -934,6 +943,13 @@ require('lazy').setup({
         return '%2l:%-2v'
       end
 
+      require('mini.jump').setup {
+        delay = {
+          highlight = 100,
+          idle_stop = 3500,
+        },
+      }
+
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
@@ -944,7 +960,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'fish', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'ruby' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -955,6 +971,7 @@ require('lazy').setup({
         additional_vim_regex_highlighting = { 'ruby' },
       },
       indent = { enable = true, disable = { 'ruby' } },
+      endwise = { enable = true },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -974,17 +991,17 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
