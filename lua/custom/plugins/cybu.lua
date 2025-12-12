@@ -13,7 +13,7 @@ return {
         -- bottomleft, bottomcenter, bottomright
         vertical_offset = 10, -- vertical offset from anchor in lines
         horizontal_offset = 0, -- vertical offset from anchor in columns
-        max_win_height = 5, -- height of cybu window in lines
+        max_win_height = 10, -- height of cybu window in lines
         max_win_width = 0.5, -- integer for absolute in columns
         -- float for relative to win/editor width
       },
@@ -55,7 +55,7 @@ return {
         },
         show_on_autocmd = false, -- event to trigger cybu (eg. "BufEnter")
       },
-      display_time = 700, -- time the cybu window is displayed
+      display_time = 0, -- time the cybu window is displayed
       exclude = { -- filetypes, cybu will not be active
         'neo-tree',
         'fugitive',
@@ -67,10 +67,17 @@ return {
       fallback = function() end, -- arbitrary fallback function
       -- used in excluded filetypes
     }
-    vim.keymap.set('n', '[b', '<Plug>(CybuPrev)')
-    vim.keymap.set('n', ']b', '<Plug>(CybuNext)')
+    vim.keymap.set('n', 'H', '<Plug>(CybuPrev)')
+    vim.keymap.set('n', 'L', '<Plug>(CybuNext)')
     vim.keymap.set('n', '<s-tab>', '<plug>(CybuLastusedPrev)')
-    vim.keymap.set('n', '<tab>', '<plug>(CybuLastusedNext)')
     vim.keymap.set('n', '<c-i>', '<c-i>')
+    vim.keymap.set('n', '<Tab>', function()
+      local alt = vim.fn.bufnr '#'
+      if alt > 0 and vim.fn.buflisted(alt) == 1 then
+        vim.cmd 'b#'
+      else
+        vim.notify('No alternate buffer', vim.log.levels.WARN)
+      end
+    end, { desc = 'Toggle last buffer' })
   end,
 }

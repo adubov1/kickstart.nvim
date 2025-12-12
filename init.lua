@@ -80,6 +80,9 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- session compat
+vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -142,10 +145,10 @@ if vim.g.neovide then
     vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
   end
   vim.keymap.set('n', '<C-=>', function()
-    change_scale_factor(1.25)
+    change_scale_factor(1.1)
   end)
   vim.keymap.set('n', '<C-->', function()
-    change_scale_factor(1 / 1.25)
+    change_scale_factor(1 / 1.1)
   end)
 
   vim.g.neovide_cursor_trail_size = 0
@@ -364,6 +367,11 @@ require('lazy').setup({
           mappings = {
             i = { ['<c-d>'] = 'delete_buffer' },
           },
+        },
+        pickers = {
+          lsp_references = { theme = 'cursor' },
+          lsp_definitions = { theme = 'cursor' },
+          lsp_implementations = { theme = 'cursor' },
         },
         extensions = {
           ['ui-select'] = {
@@ -950,8 +958,11 @@ require('lazy').setup({
         },
       }
 
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
+      if not vim.g.neovide then
+        require('mini.animate').setup()
+      end
+
+      require('mini.move').setup()
     end,
   },
   { -- Highlight, edit, and navigate code
