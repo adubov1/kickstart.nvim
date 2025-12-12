@@ -365,7 +365,20 @@ require('lazy').setup({
         --
         defaults = {
           mappings = {
-            i = { ['<c-d>'] = 'delete_buffer' },
+            i = {
+              ['<c-d>'] = 'delete_buffer',
+              ['<Esc>'] = function(prompt_bufnr)
+                -- Close picker if no input and in insert mode
+                local action_state = require 'telescope.actions.state'
+                local actions = require 'telescope.actions'
+                local picker = action_state.get_current_picker(prompt_bufnr)
+                local prompt = picker:_get_prompt()
+
+                if prompt == '' then
+                  actions.close(prompt_bufnr)
+                end
+              end,
+            },
           },
         },
         pickers = {
@@ -375,7 +388,7 @@ require('lazy').setup({
         },
         extensions = {
           ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
+            require('telescope.themes').get_cursor(),
           },
         },
       }
