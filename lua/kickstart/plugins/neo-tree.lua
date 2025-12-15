@@ -11,16 +11,19 @@ return {
   },
   lazy = false,
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '\\', ':Neotree reveal reveal_force_cwd<CR>', desc = 'NeoTree reveal', silent = true },
   },
   opts = {
+    auto_clean_after_session_restore = false,
     window = {
       width = 30,
     },
     filtered_items = {
-      visible = true, -- This is what you want: If you set this to `true`, all "hide" just mean "dimmed out"
+      hide_dotfiles = false,
+      hide_gitignored = false,
     },
     filesystem = {
+      hijack_netrw_behavior = 'disabled',
       window = {
         mappings = {
           ['\\'] = 'close_window',

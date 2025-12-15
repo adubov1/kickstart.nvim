@@ -12,14 +12,6 @@ return {
     ---@type AutoSession.Config
     opts = {
       suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
-      pre_save_cmds = {
-        'Neotree close',
-      },
-      post_restore_cmds = {
-        'Neotree action=show reveal_force_cwd',
-        'windo wincmd l',
-        'tabdo bnext', -- weird hack, autosession always opens prev buf
-      },
     },
   },
 }

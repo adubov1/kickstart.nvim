@@ -83,6 +83,8 @@ vim.o.confirm = true
 -- session compat
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
+vim.o.termguicolors = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -123,13 +125,17 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 vim.keymap.set('i', 'jk', '<ESC>')
-vim.keymap.set('n', '<leader>l', '<Cmd>Lazy<CR>')
+vim.keymap.set('n', '<leader>l', '<CMD>Lazy<CR>')
 
-vim.keymap.set('n', '<leader>bd', '<cmd>bdelete<CR>')
+vim.keymap.set('n', '<leader>bd', '<CMD>bdelete<CR>')
+vim.keymap.set('n', '<leader>bD', '<CMD>%bdelete<CR>')
 
-vim.keymap.set('n', '<leader>w', '<Cmd>write<CR>')
-vim.keymap.set('n', '<leader>q', '<Cmd>quit<CR>')
-vim.keymap.set('n', '<M-q>', '<Cmd>qall<CR>')
+vim.keymap.set('n', '<leader>v', '<CMD>vsp<CR>')
+vim.keymap.set('n', '<leader>H', '<CMD>sp<CR>')
+
+vim.keymap.set('n', '<leader>w', '<CMD>write<CR>')
+vim.keymap.set('n', '<leader>q', '<CMD>quit<CR>')
+vim.keymap.set('n', '<M-q>', '<CMD>qall<CR>')
 
 -- Neovide Config
 if vim.g.neovide then
@@ -376,6 +382,8 @@ require('lazy').setup({
 
                 if prompt == '' then
                   actions.close(prompt_bufnr)
+                else
+                  vim.cmd 'stopinsert'
                 end
               end,
             },
@@ -406,6 +414,12 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('v', '<leader>sw', builtin.grep_string, { desc = '[S]earch current selection' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+      vim.keymap.set(
+        'n',
+        '<leader>sg',
+        ":lua require('telescope.builtin').live_grep({ additional_args = function() return { '--hidden' } end })<cr>",
+        { desc = '[S]earch by [G]rep' }
+      )
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
@@ -556,35 +570,6 @@ require('lazy').setup({
             else
               return client.supports_method(method, { bufnr = bufnr })
             end
-          end
-
-          -- The following two autocommands are used to highlight references of the
-          -- word under your cursor when your cursor rests there for a little while.
-          --    See `:help CursorHold` for information about when this is executed
-          --
-          -- When you move your cursor, the highlights will be cleared (the second autocommand).
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.document_highlight,
-            })
-
-            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-              buffer = event.buf,
-              group = highlight_augroup,
-              callback = vim.lsp.buf.clear_references,
-            })
-
-            vim.api.nvim_create_autocmd('LspDetach', {
-              group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-              callback = function(event2)
-                vim.lsp.buf.clear_references()
-                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-              end,
-            })
           end
 
           -- The following code creates a keymap to toggle inlay hints in your
@@ -976,6 +961,14 @@ require('lazy').setup({
       end
 
       require('mini.move').setup()
+
+      require('mini.files').setup()
+      vim.keymap.set('n', '-', function()
+        local buf_name = vim.api.nvim_buf_get_name(0)
+        local path = vim.fn.filereadable(buf_name) == 1 and buf_name or vim.fn.getcwd()
+        MiniFiles.open(path)
+        MiniFiles.reveal_cwd()
+      end, { desc = 'Open Mini Files' })
     end,
   },
   { -- Highlight, edit, and navigate code
@@ -1018,7 +1011,6 @@ require('lazy').setup({
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
