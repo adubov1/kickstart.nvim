@@ -137,6 +137,10 @@ vim.keymap.set('n', '<leader>w', '<CMD>write<CR>')
 vim.keymap.set('n', '<leader>q', '<CMD>quit<CR>')
 vim.keymap.set('n', '<M-q>', '<CMD>qall<CR>')
 
+-- Ability to repeat indenting easily by staying in visual mode
+vim.keymap.set('x', '>', '>gv')
+vim.keymap.set('x', '<', '<gv')
+
 -- Neovide Config
 if vim.g.neovide then
   vim.keymap.set('n', '<D-s>', ':w<CR>') -- Save
@@ -325,6 +329,7 @@ require('lazy').setup({
     event = 'VimEnter',
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'desdic/telescope-rooter.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
 
@@ -390,6 +395,7 @@ require('lazy').setup({
           },
         },
         pickers = {
+          find_files = { hidden = true },
           lsp_references = { theme = 'cursor' },
           lsp_definitions = { theme = 'cursor' },
           lsp_implementations = { theme = 'cursor' },
@@ -398,13 +404,18 @@ require('lazy').setup({
           ['ui-select'] = {
             require('telescope.themes').get_cursor(),
           },
+          rooter = {
+            enable = true,
+            patterns = { '.git' },
+          },
         },
       }
 
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
-
+      pcall(require('telescope').load_extension, 'rooter')
+      --
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
@@ -969,6 +980,14 @@ require('lazy').setup({
         MiniFiles.open(path)
         MiniFiles.reveal_cwd()
       end, { desc = 'Open Mini Files' })
+
+      require('mini.indentscope').setup {
+        draw = {
+          predicate = function()
+            return false
+          end,
+        },
+      }
     end,
   },
   { -- Highlight, edit, and navigate code
