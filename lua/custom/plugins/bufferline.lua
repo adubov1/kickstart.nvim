@@ -7,6 +7,15 @@ return {
     'akinsho/bufferline.nvim',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    opts = {},
+    config = function(_, opts)
+      require('bufferline').setup(opts)
+      local map = vim.keymap.set
+
+      map('n', '<leader>bH', '<Cmd>BufferLineCloseLeft<CR>', { desc = 'Delete buffers to the left' })
+      map('n', '<leader>bL', '<Cmd>BufferLineCloseRight<CR>', { desc = 'Delete buffers to the right' })
+
+      map('n', '<leader>b[', '<Cmd>BufferLineMovePrev<CR>', { desc = 'Move buffer left' })
+      map('n', '<leader>b]', '<Cmd>BufferLineMoveNext<CR>', { desc = 'Move buffer right' })
+    end,
   },
 }

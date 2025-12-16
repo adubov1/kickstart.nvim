@@ -164,6 +164,38 @@ if vim.g.neovide then
 
   vim.g.neovide_cursor_trail_size = 0
   vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
+
+  local original_scroll_animation_length = 0.3
+  local original_scroll_animation_far_lines = 1
+
+  -- Create autocommands to disable scroll animation when Telescope opens
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'TelescopeFindPre',
+    callback = function()
+      -- Save current values in case they were customized
+      original_scroll_animation_length = vim.g.neovide_scroll_animation_length or 0.3
+      original_scroll_animation_far_lines = vim.g.neovide_scroll_animation_far_lines or 1
+
+      -- Disable scroll animations
+      vim.g.neovide_scroll_animation_length = 0
+      vim.g.neovide_scroll_animation_far_lines = 0
+    end,
+  })
+
+  -- Restore when Telescope closes
+  vim.api.nvim_create_autocmd('WinLeave', {
+    callback = function()
+      -- Check if we're leaving a Telescope window
+      local filetype = vim.bo.filetype
+      if filetype == 'TelescopePrompt' or filetype == 'TelescopeResults' then
+        -- Small delay to ensure Telescope is fully closed
+        vim.defer_fn(function()
+          vim.g.neovide_scroll_animation_length = original_scroll_animation_length
+          vim.g.neovide_scroll_animation_far_lines = original_scroll_animation_far_lines
+        end, 50)
+      end
+    end,
+  })
 end
 
 -- Allow clipboard copy paste in neovim
@@ -892,7 +924,7 @@ require('lazy').setup({
       fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
-      signature = { enabled = true },
+      signature = { enabled = false },
     },
   },
 
