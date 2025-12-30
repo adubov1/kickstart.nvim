@@ -135,7 +135,7 @@ vim.keymap.set('n', '<leader>v', '<CMD>vsp<CR>')
 vim.keymap.set('n', '<leader>H', '<CMD>sp<CR>')
 
 vim.keymap.set('n', '<leader>w', '<CMD>write<CR>')
-vim.keymap.set('n', '<leader>q', '<CMD>quit<CR>')
+vim.keymap.set('n', '<leader>q', '<CMD>bdelete<CR>')
 vim.keymap.set('n', '<M-q>', '<CMD>qall<CR>')
 
 -- Ability to repeat indenting easily by staying in visual mode
@@ -408,6 +408,7 @@ require('lazy').setup({
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
+          file_ignore_patterns = { '^.git/', '&node_modules/' },
           mappings = {
             i = {
               ['<c-d>'] = 'delete_buffer',
@@ -737,7 +738,7 @@ require('lazy').setup({
             add_ruby_deps_command(client, buffer)
           end,
           init_options = {
-            formatter = 'auto',
+            formatter = 'rubocop',
             addonSettings = {
               ['Ruby LSP Rails'] = {
                 enablePendingMigrationsPrompt = false,

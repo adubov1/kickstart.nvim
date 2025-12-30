@@ -67,9 +67,6 @@ return {
       fallback = function() end, -- arbitrary fallback function
       -- used in excluded filetypes
     }
-    vim.keymap.set('n', 'H', '<Plug>(CybuPrev)')
-    vim.keymap.set('n', 'L', '<Plug>(CybuNext)')
-    vim.keymap.set('n', '<s-tab>', '<plug>(CybuLastusedPrev)')
     vim.keymap.set('n', '<c-i>', '<c-i>')
     vim.keymap.set('n', '<Tab>', function()
       local alt = vim.fn.bufnr '#'
