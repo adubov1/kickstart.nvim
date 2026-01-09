@@ -126,6 +126,8 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 vim.keymap.set('i', 'jk', '<ESC>')
+vim.keymap.set('i', 'Jk', '<ESC>')
+vim.keymap.set('i', 'JK', '<ESC>')
 vim.keymap.set('n', '<leader>l', '<CMD>Lazy<CR>')
 
 vim.keymap.set('n', '<leader>bd', '<CMD>bdelete<CR>')
