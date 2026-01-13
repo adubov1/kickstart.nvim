@@ -736,6 +736,8 @@ require('lazy').setup({
           },
         },
         ruby_lsp = {
+          mason = false,
+          cmd = { vim.fn.expand '~/Mono/.direnv/ruby/bin/ruby-lsp' },
           on_attach = function(client, buffer)
             add_ruby_deps_command(client, buffer)
           end,
@@ -772,6 +774,10 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
+
+      -- ensure ruby-lsp is not handled by mason
+      ensure_installed['ruby_lsp'] = nil
+
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
