@@ -235,6 +235,10 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
+-- [[ vim.lsp-managed LSPs ]]
+--     See the lsp directory for configs
+vim.lsp.enable 'ruby-lsp'
+
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -735,26 +739,6 @@ require('lazy').setup({
             },
           },
         },
-        ruby_lsp = {
-          mason = false,
-          cmd = { vim.fn.expand '~/Mono/.direnv/ruby/bin/ruby-lsp' },
-          on_attach = function(client, buffer)
-            add_ruby_deps_command(client, buffer)
-          end,
-          init_options = {
-            formatter = 'rubocop',
-            addonSettings = {
-              ['Ruby LSP Rails'] = {
-                enablePendingMigrationsPrompt = false,
-              },
-            },
-            indexing = {
-              excludedPatterns = {
-                '**/storage/**',
-              },
-            },
-          },
-        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -985,7 +969,23 @@ require('lazy').setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      require('mini.surround').setup {
+        respect_selection_type = true,
+        custom_surroundings = {
+          -- Use `d` as the identifier for Ruby `do ... end`
+          d = {
+            output = { left = 'do\n', right = '\nend' },
+          },
+        },
+        mappings = {
+          add = 'gsa', -- Add surrounding in Normal and Visual modes
+          delete = 'gsd', -- Delete surrounding
+          find = 'gsf', -- Find surrounding (to the right)
+          find_left = 'gsF', -- Find surrounding (to the left)
+          highlight = 'gsh', -- Highlight surrounding
+          replace = 'gsr', -- Replace surrounding
+        },
+      }
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,

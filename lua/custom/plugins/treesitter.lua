@@ -5,8 +5,17 @@
 
 -- Additional treesitter functionality
 return {
+  { 'windwp/nvim-ts-autotag', opts = {} },
   { 'RRethy/nvim-treesitter-endwise', dependencies = { 'nvim-treesitter/nvim-treesitter' } },
-  { 'nvim-treesitter/nvim-treesitter-context', dependencies = { 'nvim-treesitter/nvim-treesitter' } },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    version = '*',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    opts = {
+      max_lines = 5,
+      multiline_threshold = 2,
+    },
+  },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
     version = '*',
