@@ -1,10 +1,18 @@
--- You can add your own plugins here or in other files in this directory!
---  I promise not to create any merge conflicts in this directory :)
---
--- See the kickstart.nvim README for more information
-
--- Additional treesitter functionality
 return {
+  {
+    'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    config = function()
+      local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'ruby' }
+      require('nvim-treesitter').install(filetypes)
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = filetypes,
+        callback = function()
+          vim.treesitter.start()
+        end,
+      })
+    end,
+  },
   { 'windwp/nvim-ts-autotag', dependencies = { 'nvim-treesitter/nvim-treesitter' }, opts = {} },
   { 'RRethy/nvim-treesitter-endwise', dependencies = { 'nvim-treesitter/nvim-treesitter' } },
   {
@@ -21,15 +29,7 @@ return {
     branch = 'main',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     init = function()
-      -- Disable entire built-in ftplugin mappings to avoid conflicts.
-      -- See https://github.com/neovim/neovim/tree/master/runtime/ftplugin for built-in ftplugins.
       vim.g.no_plugin_maps = true
-
-      -- Or, disable per filetype (add as you like)
-      -- vim.g.no_python_maps = true
-      -- vim.g.no_ruby_maps = true
-      -- vim.g.no_rust_maps = true
-      -- vim.g.no_go_maps = true
     end,
   },
 }
