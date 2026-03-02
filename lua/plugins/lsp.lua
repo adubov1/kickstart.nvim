@@ -13,9 +13,12 @@ return {
       callback = function(event)
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client:supports_method('textDocument/inlayHint', event.buf) then
-          vim.keymap.set('n', '<leader>th', function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-          end, { buffer = event.buf, desc = 'LSP: [T]oggle Inlay [H]ints' })
+          vim.keymap.set(
+            'n',
+            '<leader>th',
+            function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end,
+            { buffer = event.buf, desc = 'LSP: [T]oggle Inlay [H]ints' }
+          )
         end
       end,
     })
@@ -23,6 +26,7 @@ return {
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
     local servers = {
+      ts_ls = {},
       herb_ls = {},
       ruby_lsp = {
         init_options = {
@@ -53,9 +57,7 @@ return {
       on_init = function(client)
         if client.workspace_folders then
           local path = client.workspace_folders[1].name
-          if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
-            return
-          end
+          if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then return end
         end
 
         client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {

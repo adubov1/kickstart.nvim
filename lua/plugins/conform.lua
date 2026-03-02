@@ -5,9 +5,7 @@ return {
   keys = {
     {
       '<leader>F',
-      function()
-        require('conform').format { async = true, lsp_format = 'fallback' }
-      end,
+      function() require('conform').format { async = true, lsp_format = 'fallback' } end,
       mode = '',
       desc = '[F]ormat buffer',
     },
@@ -28,7 +26,7 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        eruby = { 'herb_format', 'rubocop' },
+        eruby = { 'herb_format', lsp_format = 'first' },
       },
       formatters = {
         herb_format = {

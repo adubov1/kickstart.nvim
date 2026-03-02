@@ -7,26 +7,37 @@ vim.o.number = true
 vim.o.mouse = 'a'
 vim.o.showmode = false
 
-vim.schedule(function()
-  vim.o.clipboard = 'unnamedplus'
-end)
+vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
-vim.o.breakindent = true
-vim.o.expandtab = true
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.breakindent = true
+vim.opt.smartindent = true
+vim.opt.expandtab = true
+
 vim.o.undofile = true
+
 vim.o.ignorecase = true
 vim.o.smartcase = true
+
 vim.o.signcolumn = 'yes'
+
 vim.o.updatetime = 250
 vim.o.timeoutlen = 300
+
 vim.o.splitright = true
 vim.o.splitbelow = true
+
+vim.o.inccommand = 'split'
+
+vim.o.cursorline = true
+
+vim.o.scrolloff = 10
+
+vim.o.confirm = true
+
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-vim.o.inccommand = 'split'
-vim.o.cursorline = true
-vim.o.scrolloff = 10
-vim.o.confirm = true
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 vim.o.termguicolors = true
 
@@ -69,6 +80,12 @@ vim.keymap.set('n', '<M-q>', '<CMD>qall<CR>')
 vim.keymap.set('x', '>', '>gv')
 vim.keymap.set('x', '<', '<gv')
 
+vim.keymap.set('n', '<leader>yp', function()
+  local path = vim.fn.expand '%'
+  vim.fn.setreg('+', path)
+  vim.notify('Copied: ' .. path)
+end, { desc = 'Copy relative file path' })
+
 -- Neovide
 if vim.g.neovide then
   vim.keymap.set('n', '<D-s>', ':w<CR>')
@@ -79,15 +96,9 @@ if vim.g.neovide then
   vim.keymap.set('i', '<D-v>', '<ESC>l"+Pli')
 
   vim.g.neovide_scale_factor = 1.0
-  local change_scale_factor = function(delta)
-    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
-  end
-  vim.keymap.set('n', '<C-=>', function()
-    change_scale_factor(1.1)
-  end)
-  vim.keymap.set('n', '<C-->', function()
-    change_scale_factor(1 / 1.1)
-  end)
+  local change_scale_factor = function(delta) vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta end
+  vim.keymap.set('n', '<C-=>', function() change_scale_factor(1.1) end)
+  vim.keymap.set('n', '<C-->', function() change_scale_factor(1 / 1.1) end)
 
   vim.g.neovide_cursor_trail_size = 0
   vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
@@ -127,9 +138,7 @@ vim.api.nvim_set_keymap('v', '<D-v>', '<C-R>+', { noremap = true, silent = true 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
-  callback = function()
-    vim.hl.on_yank()
-  end,
+  callback = function() vim.hl.on_yank() end,
 })
 
 -- Bootstrap lazy.nvim
@@ -137,9 +146,7 @@ local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
-  if vim.v.shell_error ~= 0 then
-    error('Error cloning lazy.nvim:\n' .. out)
-  end
+  if vim.v.shell_error ~= 0 then error('Error cloning lazy.nvim:\n' .. out) end
 end
 
 ---@type vim.Option

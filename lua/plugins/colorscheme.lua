@@ -1,15 +1,10 @@
 return {
   {
-    'folke/tokyonight.nvim',
+    'rebelot/kanagawa.nvim',
     priority = 1000,
     config = function()
-      require('tokyonight').setup {
-        style = 'night',
-        styles = {
-          comments = { italic = false },
-        },
-      }
-      vim.cmd.colorscheme 'tokyonight'
+      require('kanagawa').setup {}
+      vim.cmd.colorscheme 'kanagawa-wave'
     end,
   },
 }
