@@ -10,7 +10,7 @@ return {
     map('n', '<leader>bO', '<Cmd>BufferLineCloseLeft<CR><Cmd>BufferLineCloseRight<CR>', { desc = 'Close all other buffers' })
     map('n', 'H', '<Cmd>BufferLineCyclePrev<CR>', { desc = 'Switch to the previous buffer' })
     map('n', 'L', '<Cmd>BufferLineCycleNext<CR>', { desc = 'Switch to the next buffer' })
-    map('n', '<C-H>', '<Cmd>BufferLineMovePrev<CR>', { desc = 'Move buffer left' })
-    map('n', '<C-L>', '<Cmd>BufferLineMoveNext<CR>', { desc = 'Move buffer right' })
+    map('n', '<M-H>', '<Cmd>BufferLineMovePrev<CR>', { desc = 'Move buffer left' })
+    map('n', '<M-L>', '<Cmd>BufferLineMoveNext<CR>', { desc = 'Move buffer right' })
   end,
 }

@@ -29,6 +29,7 @@ return {
       ts_ls = {},
       herb_ls = {},
       ruby_lsp = {
+        cmd = { 'ruby-lsp' },
         init_options = {
           addonSettings = {
             ['Ruby LSP Rails'] = {
@@ -40,6 +41,9 @@ return {
     }
 
     local ensure_installed = vim.tbl_keys(servers or {})
+
+    ensure_installed = vim.tbl_filter(function(v) return v ~= 'ruby_lsp' end, ensure_installed)
+
     vim.list_extend(ensure_installed, {
       'lua_ls',
       'stylua',

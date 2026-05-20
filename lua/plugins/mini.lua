@@ -29,9 +29,7 @@ return {
     local statusline = require 'mini.statusline'
     statusline.setup { use_icons = vim.g.have_nerd_font }
     ---@diagnostic disable-next-line: duplicate-set-field
-    statusline.section_location = function()
-      return '%2l:%-2v'
-    end
+    statusline.section_location = function() return '%2l:%-2v' end
 
     require('mini.jump').setup()
     require('mini.jump2d').setup()
@@ -40,9 +38,7 @@ return {
 
     require('mini.files').setup()
     vim.keymap.set('n', '-', function()
-      if MiniFiles.close() then
-        return
-      end
+      if MiniFiles.close() then return end
       local buf_name = vim.api.nvim_buf_get_name(0)
       local path = vim.fn.filereadable(buf_name) == 1 and buf_name or vim.fn.getcwd()
       MiniFiles.open(path)
@@ -51,9 +47,7 @@ return {
 
     vim.api.nvim_create_autocmd('User', {
       pattern = 'MiniFilesActionRename',
-      callback = function(event)
-        Snacks.rename.on_rename_file(event.data.from, event.data.to)
-      end,
+      callback = function(event) Snacks.rename.on_rename_file(event.data.from, event.data.to) end,
     })
   end,
 }

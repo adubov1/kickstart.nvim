@@ -7,6 +7,8 @@ vim.o.number = true
 vim.o.mouse = 'a'
 vim.o.showmode = false
 
+vim.o.guifont = 'MonoLisa Nerd Font:h16'
+
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 vim.opt.tabstop = 2
