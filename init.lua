@@ -7,8 +7,6 @@ vim.o.number = true
 vim.o.mouse = 'a'
 vim.o.showmode = false
 
-vim.o.guifont = 'MonoLisa Nerd Font:h16'
-
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 vim.opt.tabstop = 2
@@ -102,8 +100,22 @@ if vim.g.neovide then
   vim.keymap.set('n', '<C-=>', function() change_scale_factor(1.1) end)
   vim.keymap.set('n', '<C-->', function() change_scale_factor(1 / 1.1) end)
 
+  vim.opt.winblend = 100
+  vim.opt.pumblend = 100
+
   vim.g.neovide_cursor_trail_size = 0
   vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
+  vim.g.neovide_floating_shadow = true
+  vim.g.neovide_floating_z_height = 10
+  vim.g.neovide_light_angle_degrees = 45
+  vim.g.neovide_light_radius = 5
+  vim.g.neovide_floating_corner_radius = 0.4
+  vim.g.neovide_floating_blur_amount_x = 40
+  vim.g.neovide_floating_blur_amount_y = 40
+  vim.g.neovide_show_border = false
+  vim.g.neovide_position_animation_length = 0.00
+  vim.g.neovide_scroll_animation_far_lines = 0
+  vim.g.neovide_proxy_icon = true
 
   local original_scroll_animation_length = 0.3
   local original_scroll_animation_far_lines = 1

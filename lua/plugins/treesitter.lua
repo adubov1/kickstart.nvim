@@ -7,9 +7,7 @@ return {
       require('nvim-treesitter').install(filetypes)
       vim.api.nvim_create_autocmd('FileType', {
         pattern = filetypes,
-        callback = function()
-          vim.treesitter.start()
-        end,
+        callback = function() vim.treesitter.start() end,
       })
     end,
   },
@@ -20,6 +18,8 @@ return {
     version = '*',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     opts = {
+      multiwindow = true,
+      line_numbers = false,
       max_lines = 5,
       multiline_threshold = 2,
     },
@@ -28,8 +28,6 @@ return {
     'nvim-treesitter/nvim-treesitter-textobjects',
     branch = 'main',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
-    init = function()
-      vim.g.no_plugin_maps = true
-    end,
+    init = function() vim.g.no_plugin_maps = true end,
   },
 }
