@@ -30,6 +30,7 @@ return {
       herb_ls = {},
       ruby_lsp = {
         cmd = { 'ruby-lsp' },
+        root_markers = { '.git' },
         init_options = {
           addonSettings = {
             ['Ruby LSP Rails'] = {

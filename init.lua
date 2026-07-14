@@ -100,8 +100,8 @@ if vim.g.neovide then
   vim.keymap.set('n', '<C-=>', function() change_scale_factor(1.1) end)
   vim.keymap.set('n', '<C-->', function() change_scale_factor(1 / 1.1) end)
 
-  vim.opt.winblend = 100
-  vim.opt.pumblend = 100
+  vim.opt.winblend = 30
+  vim.opt.pumblend = 30
 
   vim.g.neovide_cursor_trail_size = 0
   vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
@@ -110,8 +110,8 @@ if vim.g.neovide then
   vim.g.neovide_light_angle_degrees = 45
   vim.g.neovide_light_radius = 5
   vim.g.neovide_floating_corner_radius = 0.4
-  vim.g.neovide_floating_blur_amount_x = 40
-  vim.g.neovide_floating_blur_amount_y = 40
+  vim.g.neovide_floating_blur_amount_x = 20
+  vim.g.neovide_floating_blur_amount_y = 20
   vim.g.neovide_show_border = false
   vim.g.neovide_position_animation_length = 0.00
   vim.g.neovide_scroll_animation_far_lines = 0

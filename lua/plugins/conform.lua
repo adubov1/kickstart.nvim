@@ -18,7 +18,7 @@ return {
       },
       format_on_save = function(bufnr)
         local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
+        if disable_filetypes[vim.bo[bufnr].filetype] or vim.g.daf then
           return nil
         else
           return { timeout_ms = 2500 }
@@ -26,14 +26,6 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        eruby = { 'herb_format', lsp_format = 'first' },
-      },
-      formatters = {
-        herb_format = {
-          command = 'herb-format',
-          args = { '--config-file', '.herb.yml', '-' },
-          stdin = true,
-        },
       },
     }
   end,
