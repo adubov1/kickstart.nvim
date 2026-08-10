@@ -9,9 +9,14 @@ local colorschemes = {
     name = 'kanagawa',
     variant = 'kanagawa-wave',
   },
+  luna = {
+    url = 'wtfox/luna.nvim',
+    name = 'luna',
+    variant = 'luna',
+  },
 }
 
-local colorscheme = colorschemes['mac_clear']
+local colorscheme = colorschemes['luna']
 
 return {
   {

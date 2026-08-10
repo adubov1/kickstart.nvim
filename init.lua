@@ -100,8 +100,8 @@ if vim.g.neovide then
   vim.keymap.set('n', '<C-=>', function() change_scale_factor(1.1) end)
   vim.keymap.set('n', '<C-->', function() change_scale_factor(1 / 1.1) end)
 
-  vim.opt.winblend = 100
-  vim.opt.pumblend = 100
+  vim.opt.winblend = 40
+  vim.opt.pumblend = 40
 
   vim.g.neovide_cursor_trail_size = 0
   vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
