@@ -41,8 +41,13 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 vim.o.termguicolors = true
 
--- Keymaps
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+--- @param diagnostic? vim.Diagnostic
+--- @param bufnr integer
+local function on_jump(diagnostic, bufnr)
+  if not diagnostic then return end
+
+  vim.diagnostic.show(diagnostic.namespace, bufnr, { diagnostic }, { virtual_lines = { current_line = true }, virtual_text = false })
+end
 
 vim.diagnostic.config {
   update_in_insert = false,
@@ -51,8 +56,11 @@ vim.diagnostic.config {
   underline = { severity = vim.diagnostic.severity.ERROR },
   virtual_text = true,
   virtual_lines = false,
-  jump = { float = true },
+  jump = { on_jump = on_jump },
 }
+
+-- Keymaps
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })

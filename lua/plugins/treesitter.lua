@@ -5,9 +5,22 @@ return {
     config = function()
       local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'ruby' }
       require('nvim-treesitter').install(filetypes)
+
       vim.api.nvim_create_autocmd('FileType', {
         pattern = filetypes,
         callback = function() vim.treesitter.start() end,
+      })
+
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'TSUpdate',
+        callback = function()
+          require('nvim-treesitter.parsers').straps = {
+            install_info = {
+              path = '~/.config/nvim/lib/straps',
+              location = 'tree-sitter-straps',
+            },
+          }
+        end,
       })
     end,
   },

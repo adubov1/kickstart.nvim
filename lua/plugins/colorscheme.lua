@@ -16,7 +16,7 @@ local colorschemes = {
   },
 }
 
-local colorscheme = colorschemes['luna']
+local colorscheme = colorschemes['mac_clear']
 
 return {
   {

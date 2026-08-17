@@ -2,6 +2,8 @@ return {
   'nvim-mini/mini.nvim',
   version = '*',
   config = function()
+    require('mini.icons').setup()
+
     local ts_spec = require('mini.ai').gen_spec.treesitter
     require('mini.ai').setup {
       n_lines = 500,
@@ -32,7 +34,6 @@ return {
     statusline.section_location = function() return '%2l:%-2v' end
 
     require('mini.jump').setup()
-    require('mini.jump2d').setup()
 
     require('mini.move').setup()
 
