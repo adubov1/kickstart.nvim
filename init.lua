@@ -94,6 +94,14 @@ vim.keymap.set('n', '<leader>yp', function()
   vim.notify('Copied: ' .. path)
 end, { desc = 'Copy relative file path' })
 
+-- Zellij
+if vim.env.ZELLIJ_SESSION_NAME and vim.env.ZELLIJ_PANE_ID then
+  local dir = ('%s/nvim-zellij/%s'):format(vim.env.XDG_RUNTIME_DIR or '/tmp', vim.env.ZELLIJ_SESSION_NAME)
+  vim.fn.mkdir(dir, 'p')
+  local sock = ('%s/%s.sock'):format(dir, vim.env.ZELLIJ_PANE_ID)
+  pcall(vim.fn.serverstart, sock)
+end
+
 -- Neovide
 if vim.g.neovide then
   vim.keymap.set('n', '<D-s>', ':w<CR>')

@@ -29,7 +29,7 @@ return {
       ts_ls = {},
       herb_ls = {},
       ruby_lsp = {
-        cmd = { 'ruby-lsp' },
+        cmd = { 'bundle', 'exec', 'ruby-lsp' },
         root_markers = { '.git' },
         init_options = {
           addonSettings = {

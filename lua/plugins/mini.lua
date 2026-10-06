@@ -35,7 +35,19 @@ return {
 
     require('mini.jump').setup()
 
-    require('mini.move').setup()
+    require('mini.move').setup {
+      mappings = {
+        left = '<M-H>',
+        right = '<M-L>',
+        down = '<M-J>',
+        up = '<M-K>',
+
+        line_left = '<M-H>',
+        line_right = '<M-L>',
+        line_down = '<M-J>',
+        line_up = '<M-K>',
+      },
+    }
 
     require('mini.files').setup()
     vim.keymap.set('n', '-', function()
