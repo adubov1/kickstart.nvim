@@ -6,12 +6,14 @@ return {
 
     local ts_spec = require('mini.ai').gen_spec.treesitter
     require('mini.ai').setup {
-      n_lines = 500,
+      n_lines = 200,
       custom_textobjects = {
         s = ts_spec {
           a = '@string.outer',
           i = '@string.inner',
         },
+        m = ts_spec { a = '@function.outer', i = '@function.inner' },
+        c = ts_spec { a = '@class.outer', i = '@class.inner' },
       },
       search_method = 'cover_or_next',
     }

@@ -57,5 +57,20 @@ return {
     branch = 'main',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     init = function() vim.g.no_plugin_maps = true end,
+    config = function()
+      require('nvim-treesitter-textobjects').setup {
+        move = { set_jumps = true }, -- add jumps to the jumplist
+      }
+
+      local move = require 'nvim-treesitter-textobjects.move'
+      local map = function(lhs, fn, capture, desc)
+        vim.keymap.set({ 'n', 'x', 'o' }, lhs, function() fn(capture, 'textobjects') end, { desc = desc })
+      end
+
+      map(']m', move.goto_next_start, '@function.outer', 'Next method start')
+      map('[m', move.goto_previous_start, '@function.outer', 'Prev method start')
+      map(']M', move.goto_next_end, '@function.outer', 'Next method end')
+      map('[M', move.goto_previous_end, '@function.outer', 'Prev method end')
+    end,
   },
 }

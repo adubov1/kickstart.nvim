@@ -85,9 +85,13 @@ vim.keymap.set('n', '<leader>w', '<CMD>write<CR>')
 vim.keymap.set('n', '<leader>q', '<CMD>bdelete<CR>')
 vim.keymap.set('n', '<M-q>', '<CMD>qall<CR>')
 
-vim.keymap.set('x', '>', '>gv')
-vim.keymap.set('x', '<', '<gv')
+for i = 1, 9 do
+  vim.keymap.set({ 'n', 'i', 'v', 't' }, '<M-' .. i .. '>', function()
+    if i <= vim.fn.tabpagenr '$' then vim.cmd.tabnext(i) end
+  end, { desc = 'Go to tab ' .. i })
+end
 
+vim.keymap.set({ 'n', 'i', 'v', 't' }, '<M-0>', '<Cmd>tablast<CR>', { desc = 'Go to last tab' })
 vim.keymap.set('n', '<leader>yp', function()
   local path = vim.fn.expand '%'
   vim.fn.setreg('+', path)

@@ -1,32 +1,28 @@
-return {
-  url = 'git@github.com:ducharmemp/straps.git',
-  lazy = false,
-  config = function()
-    require('straps').setup {
-      model = 'claude-opus-5',
-      default_max_tokens = nil,
-      max_turns = 128,
-      stall_limit = 6,
-      max_tool_result_bytes = 100000,
-    }
-
-    vim.api.nvim_set_hl(0, 'StrapsTool', { link = 'Constant' })
-  end,
-  keys = {
-    {
-      '<leader>an',
-      '<CMD>Straps<CR>',
-      desc = 'New Straps session',
-    },
-    {
-      '<leader>ar',
-      '<CMD>StrapsResume<CR>',
-      desc = 'Resume Straps session',
-    },
-    {
-      '<leader>ac',
-      '<CMD>Straps<CR>',
-      desc = 'Continue current Straps session',
-    },
+local opts = {
+  keymaps = '<leader>a',
+  extensions = {
+    classifier = false,
+    renamer = { auto = { enabled = false } },
   },
+}
+
+return {
+  'ducharmemp/straps-suite',
+  lazy = false,
+  dependencies = {
+    'ducharmemp/straps',
+    'ducharmemp/straps-divergent',
+    'ducharmemp/straps-exoskeleton',
+    'ducharmemp/straps-chartifier',
+    { 'ducharmemp/buff.nvim', commit = '45ad0cb763138be7eeb03436bd34f0add7036257' },
+    'ducharmemp/straps-buff',
+    'ducharmemp/straps-kagi',
+    'ducharmemp/straps-renamer',
+    'ducharmemp/straps-classifier',
+  },
+  init = function(plugin)
+    vim.opt.runtimepath:prepend(plugin.dir)
+    require('straps_suite').prepare(opts)
+  end,
+  config = function() require('straps_suite').setup(opts) end,
 }
